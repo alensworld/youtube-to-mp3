@@ -5,29 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube'dan MP3 Dönüştürücü</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
-    <h1>YouTube'dan MP3 Dönüştürücü</h1>
-    <label for="url">YouTube Video URL'sini girin:</label><br>
-    <input type="text" id="url" required><br>
-    <button onclick="convertToMP3()">MP3 Dönüştür</button>
-
-    <h2>MP3 Dosyası:</h2>
-    <div id="result"></div>
-
     <script>
         async function convertToMP3() {
             const url = document.getElementById('url').value;
             const resultDiv = document.getElementById('result');
 
             try {
-                const response = await axios.post('YOUR_API_ENDPOINT', { url }); // Buraya bir API uç noktası ekle.
-                resultDiv.innerHTML = `<a href="${response.data.download_link}">MP3 İndir</a>`;
+                // Burada bir API çağrısı yapmalısınız
+                const response = await axios.get(`https://your-api-url.com/convert?videoUrl=${encodeURIComponent(url)}`);
+                
+                if (response.data.success) {
+                    resultDiv.innerHTML = `<a href="${response.data.mp3Url}" download>MP3 Dosyasını İndir</a>`;
+                } else {
+                    throw new Error('Dönüştürme işlemi başarısız oldu.');
+                }
             } catch (error) {
-                console.error('Dönüştürme sırasında bir hata oluştu:', error);
                 resultDiv.innerHTML = 'Bir hata oluştu. Lütfen URL\'yi kontrol edin.';
+                console.error(error);
             }
         }
     </script>
+</head>
+<body>
+    <h1>YouTube'dan MP3 Dönüştürücü</h1>
+    <label for="url">YouTube Video URL'sini girin:</label><br>
+    <input type="text" id="url" required><br>
+    <button onclick="convertToMP3()">MP3 Dönüştür</button>
+    <h2>MP3 Dosyası:</h2>
+    <div id="result"></div>
 </body>
 </html>
