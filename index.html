@@ -5,33 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube'dan MP3 Dönüştürücü</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        async function convertToMP3() {
-            const url = document.getElementById('url').value;
-            const resultDiv = document.getElementById('result');
-
-            try {
-                // Burada bir API çağrısı yapmalısınız
-                const response = await axios.get(`https://your-api-url.com/convert?videoUrl=${encodeURIComponent(url)}`);
-                
-                if (response.data.success) {
-                    resultDiv.innerHTML = `<a href="${response.data.mp3Url}" download>MP3 Dosyasını İndir</a>`;
-                } else {
-                    throw new Error('Dönüştürme işlemi başarısız oldu.');
-                }
-            } catch (error) {
-                resultDiv.innerHTML = 'Bir hata oluştu. Lütfen URL\'yi kontrol edin.';
-                console.error(error);
-            }
-        }
-    </script>
 </head>
 <body>
     <h1>YouTube'dan MP3 Dönüştürücü</h1>
     <label for="url">YouTube Video URL'sini girin:</label><br>
     <input type="text" id="url" required><br>
     <button onclick="convertToMP3()">MP3 Dönüştür</button>
+
     <h2>MP3 Dosyası:</h2>
     <div id="result"></div>
+
+    <script>
+        async function convertToMP3() {
+            const url = document.getElementById("url").value;
+            const apiUrl = `https://ytmp3.cc/api/convert?url=${encodeURIComponent(url)}`;
+
+            try {
+                const response = await axios.get(apiUrl);
+                const data = response.data;
+                if (data.status === 'success') {
+                    document.getElementById("result").innerHTML = `<a href="${data.downloadUrl}" target="_blank">MP3 Dosyasını İndir</a>`;
+                } else {
+                    document.getElementById("result").innerText = "Bir hata oluştu. Lütfen URL'yi kontrol edin.";
+                }
+            } catch (error) {
+                document.getElementById("result").innerText = "Bir hata oluştu. Lütfen tekrar deneyin.";
+                console.error(error);
+            }
+        }
+    </script>
 </body>
 </html>
